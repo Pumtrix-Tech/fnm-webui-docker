@@ -1,7 +1,6 @@
 # syntax=docker/dockerfile:1
 
-ARG FNMWEBUI_VERSION="dependabot/composer/squizlabs/php_codesniffer-3.7.2"
-#ARG FNMWEBUI_VERSION="1.0.1"
+ARG FNMWEBUI_VERSION="1.0.2"
 ARG ALPINE_VERSION="3.17"
 
 FROM crazymax/yasu:latest AS yasu
