@@ -1,0 +1,54 @@
+name: fnmwebui
+
+services:
+  db:
+    image: mariadb:10.5
+    container_name: fnmwebui_db
+    command:
+      - "mysqld"
+      - "--innodb-file-per-table=1"
+      - "--lower-case-table-names=0"
+      - "--character-set-server=utf8mb4"
+      - "--collation-server=utf8mb4_unicode_ci"
+    volumes:
+      - "fnmwebui-db:/var/lib/mysql"
+    environment:
+      - "TZ=${TZ}"
+      - "MYSQL_ALLOW_EMPTY_PASSWORD=yes"
+      - "MYSQL_DATABASE=${MYSQL_DATABASE}"
+      - "MYSQL_USER=${MYSQL_USER}"
+      - "MYSQL_PASSWORD=${MYSQL_PASSWORD}"
+    restart: always
+
+  fnmwebui:
+    image: ${FNMWEBUI_IMAGE:-pumtrix/fnm-webui:latest}
+    container_name: ${FNMWEBUI_CONTAINER:-fnmwebui}
+    hostname: fnmwebui
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    ports:
+      - target: 8000
+        published: 8000
+        protocol: tcp
+    depends_on:
+      - db
+      - redis
+    volumes:
+      - "fnmwebui-data:/data"
+    env_file:
+      - "./fnmwebui.env"
+    environment:
+      - "TZ=${TZ}"
+      - "PUID=${PUID}"
+      - "PGID=${PGID}"
+      - "DB_HOST=db"
+      - "DB_NAME=${MYSQL_DATABASE}"
+      - "DB_USER=${MYSQL_USER}"
+      - "DB_PASSWORD=${MYSQL_PASSWORD}"
+      - "DB_TIMEOUT=60"
+    restart: always
+
+volumes:
+  fnmwebui-db:
+  fnmwebui-data:

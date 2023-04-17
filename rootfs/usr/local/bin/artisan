@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+
+cd /opt/fnm-webui || exit 1
+yasu fnmwebui:fnmwebui php artisan "$@"
