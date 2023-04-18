@@ -1,5 +1,5 @@
 variable "DEFAULT_TAG" {
-  default = "fnmwebui:local"
+  default = "fnm-webui:local"
 }
 
 // Special target: https://github.com/docker/metadata-action#bake-definition
